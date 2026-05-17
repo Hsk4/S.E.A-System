@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.E.A System — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E8352A;
+    --red-dim: #c42d22;
+    --red-muted: rgba(232,53,42,0.08);
+    --red-border: rgba(232,53,42,0.2);
+    --bg: #0a0a0b;
+    --bg-1: #111113;
+    --bg-2: #18181b;
+    --bg-3: #1f1f23;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.14);
+    --text: #e8e8e8;
+    --text-muted: #888;
+    --text-dim: #555;
+    --accent-blue: #3b82f6;
+    --accent-green: #22c55e;
+    --accent-amber: #f59e0b;
+    --accent-purple: #a78bfa;
+    --sidebar-w: 260px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: var(--bg-1);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 34px; height: 34px;
+    background: var(--red);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    color: #fff;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .logo-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 400;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .nav-section {
+    padding: 16px 12px 6px;
+  }
+  .nav-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    padding: 0 8px 8px;
+    font-weight: 500;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 13.5px;
+    transition: all 0.15s;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item:hover { background: var(--bg-2); color: var(--text); }
+  .nav-item.active { background: var(--red-muted); color: var(--red); border: 1px solid var(--red-border); }
+  .nav-item svg { width: 15px; height: 15px; flex-shrink: 0; opacity: 0.7; }
+  .nav-item.active svg { opacity: 1; }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-left: 2px;
+  }
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .version-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .v-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-green); }
+
+  /* MAIN */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .breadcrumb span { color: var(--text-muted); }
+  .breadcrumb .current { color: var(--text); }
+  .topbar-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tbadge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid;
+  }
+  .tbadge-flutter { background: rgba(59,130,246,0.1); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
+  .tbadge-mern { background: rgba(34,197,94,0.1); color: #4ade80; border-color: rgba(34,197,94,0.25); }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 52px 40px 100px;
+  }
+
+  /* PAGE SECTION */
+  .page-section { display: none; }
+  .page-section.active { display: block; }
+
+  /* HERO */
+  .hero {
+    margin-bottom: 56px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--red-muted);
+    border: 1px solid var(--red-border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--red);
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 22px;
+  }
+  .hero-eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    color: #fff;
+    margin-bottom: 18px;
+  }
+  .hero h1 em { color: var(--red); font-style: normal; }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 10px;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .stat-label { font-size: 12px; color: var(--text-muted); line-height: 1.3; }
+
+  /* SECTION HEADERS */
+  .doc-h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    margin-top: 52px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .doc-h2:first-child { margin-top: 0; }
+  .doc-h2 .anchor-tag {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    font-weight: 400;
+    padding: 2px 8px;
+    background: var(--bg-2);
+    border-radius: 4px;
+  }
+  .doc-h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #ddd;
+    margin-top: 32px;
+    margin-bottom: 10px;
+    padding-left: 12px;
+    border-left: 2px solid var(--red);
+  }
+  .doc-p {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-size: 15px;
+  }
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* ROLE CARDS */
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .role-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+  .role-card:hover { border-color: var(--border-hover); }
+  .role-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .role-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .role-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+  }
+  .role-platform {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .role-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .role-features li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding-left: 14px;
+    position: relative;
+  }
+  .role-features li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--text-dim);
+  }
+
+  /* FLOW STEPS */
+  .flow-block {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .flow-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .flow-header-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ddd;
+  }
+  .flow-tag {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    margin-left: auto;
+  }
+  .flow-steps { padding: 4px 0; }
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 18px;
+    transition: background 0.15s;
+  }
+  .flow-step:hover { background: rgba(255,255,255,0.02); }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-text { font-size: 13.5px; color: var(--text-muted); }
+  .step-text strong { color: var(--text); font-weight: 500; }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13.5px;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-info { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); color: #93c5fd; }
+  .callout-warn { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fcd34d; }
+  .callout-danger { background: rgba(232,53,42,0.08); border: 1px solid rgba(232,53,42,0.2); color: #fca5a5; }
+  .callout-success { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); color: #86efac; }
+  .callout p { margin: 0; line-height: 1.6; }
+  .callout strong { color: inherit; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .code-header {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-2);
+  }
+  .code-lang {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .code-body {
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .code-kw { color: #c792ea; }
+  .code-str { color: #c3e88d; }
+  .code-comment { color: #546e7a; font-style: italic; }
+  .code-type { color: #82aaff; }
+  .code-fn { color: #82b1ff; }
+  .code-num { color: #f78c6c; }
+
+  /* SCOPE TABLE */
+  .scope-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+  .scope-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .scope-table td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .scope-table tr:hover td { background: rgba(255,255,255,0.015); }
+  .tag-in {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(34,197,94,0.1); color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.2);
+    padding: 1px 8px; border-radius: 20px; font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .tag-out {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(245,158,11,0.1); color: #fbbf24;
+    border: 1px solid rgba(245,158,11,0.2);
+    padding: 1px 8px; border-radius: 20px; font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* STACK TABLE */
+  .stack-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stack-row:last-child { border-bottom: none; }
+  .stack-layer {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    width: 100px;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stack-tech {
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .stack-note { font-size: 12px; color: var(--text-dim); margin-left: auto; font-family: 'JetBrains Mono', monospace; }
+
+  /* DISPATCH FLOW */
+  .dispatch-chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .dispatch-node {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+  .dispatch-node .dn-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .dispatch-node .dn-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .dispatch-node .dn-time { font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+  .dispatch-arrow {
+    padding: 0 4px;
+    color: var(--text-dim);
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .dispatch-node.primary { border-color: var(--red-border); background: var(--red-muted); }
+  .dispatch-node.primary .dn-name { color: #fca5a5; }
+  .dispatch-node.secondary { border-color: rgba(245,158,11,0.25); background: rgba(245,158,11,0.06); }
+  .dispatch-node.secondary .dn-name { color: #fbbf24; }
+  .dispatch-node.tertiary { border-color: rgba(59,130,246,0.25); background: rgba(59,130,246,0.06); }
+  .dispatch-node.tertiary .dn-name { color: #60a5fa; }
+
+  /* INVARIANT CARDS */
+  .invariant-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .invariant-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .inv-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-dim);
+    min-width: 24px;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .inv-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+  .inv-text strong { color: var(--text); font-weight: 500; }
+
+  /* CRITERIA GRID */
+  .criteria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .criteria-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .criteria-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .criteria-icon {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .criteria-items { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .criteria-items li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .criteria-items li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 7px;
+    width: 5px; height: 5px;
+    border-radius: 1px;
+    background: var(--text-dim);
+    transform: rotate(45deg);
+  }
+
+  /* METRIC BADGE */
+  .metric-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    padding: 1px 8px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-green);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 10px; }
+
+  /* RESPONSIVE MOBILE */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .content { padding: 32px 20px 80px; }
+    .hero h1 { font-size: 34px; }
+    .topbar { padding: 0 20px; }
+  }
+
+  /* FOLDER TREE */
+  .tree {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.9;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 16px 0;
+  }
+  .tree-dir { color: #60a5fa; }
+  .tree-file { color: var(--text-muted); }
+  .tree-comment { color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <a class="logo-badge" href="#" onclick="navigate('overview')">
+      <div class="logo-icon">S.E.A</div>
+      <div>
+        <div class="logo-text">S.E.A System</div>
+        <div class="logo-sub">Documentation v1</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Getting Started</div>
+    <button class="nav-item active" onclick="navigate('overview')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1"/><rect x="9" y="9" width="5.5" height="5.5" rx="1"/></svg>
+      Overview
+    </button>
+    <button class="nav-item" onclick="navigate('goals')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><circle cx="8" cy="8" r="3.5"/><circle cx="8" cy="8" r="1" fill="currentColor" stroke="none"/></svg>
+      Goals
+    </button>
+    <button class="nav-item" onclick="navigate('scope')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h8M2 12h5"/></svg>
+      Scope
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Architecture</div>
+    <button class="nav-item" onclick="navigate('arch')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="1.5" width="6" height="4" rx="1"/><rect x="1.5" y="10.5" width="5" height="4" rx="1"/><rect x="9.5" y="10.5" width="5" height="4" rx="1"/><path d="M8 5.5v2.5M8 8h-4.5v2.5M8 8h4.5v2.5"/></svg>
+      Architecture
+    </button>
+    <button class="nav-item" onclick="navigate('stack')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="1.5" width="13" height="3.5" rx="1"/><rect x="1.5" y="6.5" width="13" height="3.5" rx="1"/><rect x="1.5" y="11.5" width="13" height="3" rx="1"/></svg>
+      Tech Stack
+    </button>
+    <button class="nav-item" onclick="navigate('structure')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5v5H2zM2 2v12M7 8h7M7 11h5"/></svg>
+      Folder Structure
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">User Flows</div>
+    <button class="nav-item" onclick="navigate('flow-user')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5"/><path d="M2.5 13.5c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5"/></svg>
+      Civilian
+    </button>
+    <button class="nav-item" onclick="navigate('flow-responder')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5L2 4.5v4C2 11.5 4.5 14 8 14.5c3.5-.5 6-3 6-6v-4L8 1.5z"/></svg>
+      Responders
+    </button>
+    <button class="nav-item" onclick="navigate('flow-helper')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1.5 10.5l3-6 3 4 2-3 3 5"/><circle cx="13.5" cy="5.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      Helpers
+    </button>
+    <button class="nav-item" onclick="navigate('flow-admin')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M5 7h6M5 10h4"/></svg>
+      Admin Dashboard
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Standards</div>
+    <button class="nav-item" onclick="navigate('code')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5l-2.5 3L4 11M12 5l2.5 3L12 11M9 3l-2 10"/></svg>
+      Code Standards
+    </button>
+    <button class="nav-item" onclick="navigate('success')">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 8.5l3.5 3.5 7.5-8"/></svg>
+      Success Criteria
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="version-pill"><span class="v-dot"></span>v1.0 — Spec</div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div class="topbar">
+    <div class="breadcrumb">
+      <span>S.E.A System</span>
+      <span>›</span>
+      <span class="current" id="breadcrumb-current">Overview</span>
+    </div>
+    <div class="topbar-badges">
+      <span class="tbadge tbadge-flutter">Flutter</span>
+      <span class="tbadge tbadge-mern">MERN</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div class="page-section active" id="section-overview">
+      <div class="hero">
+        <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Smart Emergency Alert System</div>
+        <h1>S.E.A <em>System</em><br>Documentation</h1>
+        <p class="hero-desc">A multi-role emergency response platform connecting civilians in distress with the nearest available help — automatically dispatched, tracked in real time, and fully logged from alert to resolution.</p>
+        <div class="hero-stats">
+          <div class="stat-pill">
+            <div>
+              <div class="stat-num">6</div>
+              <div class="stat-label">User Roles</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <div>
+              <div class="stat-num">5km</div>
+              <div class="stat-label">Dispatch Radius</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <div>
+              <div class="stat-num">10s</div>
+              <div class="stat-label">Cancellation Window</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <div>
+              <div class="stat-num">10m</div>
+              <div class="stat-label">Response Timer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-h2">What is S.E.A?</div>
+      <p class="doc-p">The S.E.A System is a multi-role emergency response platform built across a <strong>Flutter mobile app</strong> and a <strong>MERN web dashboard</strong>. It supports six roles — Users, Helpers, Ambulances, Police, Firefighters, and Admins — each with a distinct, purpose-built experience.</p>
+      <p class="doc-p">At its core is a smart dispatch engine that automatically identifies the nearest responder within a 5 km radius, enforces a 10-minute response window, and escalates intelligently if no one responds.</p>
+
+      <div class="doc-h3">Six Roles</div>
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="role-card-header">
+            <div class="role-icon" style="background:rgba(232,53,42,0.12);">🆘</div>
+            <div>
+              <div class="role-name">Civilian (User)</div>
+              <div class="role-platform">mobile app</div>
+            </div>
+          </div>
+          <ul class="role-features">
+            <li>In-app panic button</li>
+            <li>Silent SOS via side button</li>
+            <li>Live responder tracking</li>
+            <li>10-second cancellation window</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-card-header">
+            <div class="role-icon" style="background:rgba(59,130,246,0.12);">🚑</div>
+            <div>
+              <div class="role-name">Ambulance</div>
+              <div class="role-platform">mobile app</div>
+            </div>
+          </div>
+          <ul class="role-features">
+            <li>Medical emergency dispatch</li>
+            <li>Accept / decline alerts</li>
+            <li>Hospital pin on map</li>
+            <li>Multi-responder visibility</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-card-header">
+            <div class="role-icon" style="background:rgba(34,197,94,0.12);">🚔</div>
+            <div>
+              <div class="role-name">Police</div>
+              <div class="role-platform">mobile app</div>
+            </div>
+          </div>
+          <ul class="role-features">
+            <li>Crime emergency dispatch</li>
+            <li>Receives silent SOS alerts</li>
+            <li>Live user GPS tracking</li>
+            <li>Area notifications when off-duty</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-card-header">
+            <div class="role-icon" style="background:rgba(245,158,11,0.12);">🚒</div>
+            <div>
+              <div class="role-name">Firefighter</div>
+              <div class="role-platform">mobile app</div>
+            </div>
+          </div>
+          <ul class="role-features">
+            <li>Fire emergency dispatch</li>
+            <li>Accept / decline alerts</li>
+            <li>Area notifications when off-duty</li>
+            <li>Admin-approved registration</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-card-header">
+            <div class="role-icon" style="background:rgba(167,139,250,0.12);">🚕</div>
+            <div>
+              <div class="role-name">Helper</div>
+              <div class="role-platform">mobile app</div>
+            </div>
+          </div>
+          <ul class="role-features">
+            <li>Medical emergencies only</li>
+            <li>No crime or fire dispatch</li>
+            <li>Transport to hospital</li>
+            <li>Volunteer vehicles eligible</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <div class="role-card-header">
+            <div class="role-icon" style="background:rgba(14,165,233,0.12);">🖥️</div>
+            <div>
+              <div class="role-name">Admin</div>
+              <div class="role-platform">web dashboard</div>
+            </div>
+          </div>
+          <ul class="role-features">
+            <li>Approve registrations</li>
+            <li>Live incident map</li>
+            <li>Broadcast announcements</li>
+            <li>Full audit logs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ</span>
+        <p><strong>Escalation Rule:</strong> Medical emergencies escalate from Ambulance → Helper when no ambulance is available. Crime and fire incidents are strictly routed to Police and Firefighters only — helpers are never dispatched to these.</p>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="page-section" id="section-goals">
+      <div class="doc-h2">Goals</div>
+      <p class="doc-p">The S.E.A system is designed around five primary goals that drive every architectural decision.</p>
+
+      <div class="doc-h3">Primary Goals</div>
+      <div class="invariant-list">
+        <div class="invariant-item">
+          <div class="inv-num">01</div>
+          <div class="inv-text"><strong>Reduce emergency response time.</strong> Get the right help to the right person as fast as possible by automating dispatch and eliminating manual coordination.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">02</div>
+          <div class="inv-text"><strong>Make emergency assistance accessible.</strong> Any registered civilian can summon help in seconds, regardless of technical literacy, with as few as 3 taps or a single button press.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">03</div>
+          <div class="inv-text"><strong>Maximize responder utilization.</strong> Ensure no available responder within range is missed, and no responder is overloaded with multiple simultaneous assignments.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">04</div>
+          <div class="inv-text"><strong>Build a smart escalation safety net.</strong> No emergency goes unanswered. If the primary responder can't make it, the system automatically finds the next best option.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">05</div>
+          <div class="inv-text"><strong>Establish accountability at every step.</strong> Every action from alert to resolution is timestamped and logged, creating a transparent, auditable record of every incident.</div>
+        </div>
+      </div>
+
+      <div class="doc-h3">Secondary Goals</div>
+      <div class="invariant-list">
+        <div class="invariant-item">
+          <div class="inv-num">06</div>
+          <div class="inv-text"><strong>Empower civilians as first responders.</strong> By bringing helpers (cabs, bikes) into the network, ordinary people with vehicles become part of the emergency response ecosystem.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">07</div>
+          <div class="inv-text"><strong>Give admins full situational awareness.</strong> A real-time dashboard means no incident goes unnoticed and system health is always visible.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">08</div>
+          <div class="inv-text"><strong>Build a foundation for scale.</strong> The architecture should be ready to onboard trusted organizations like Rescue 1122 and Edhi Foundation without a system redesign.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">09</div>
+          <div class="inv-text"><strong>Earn public trust.</strong> Role-based access, strict dispatch rules, and zero data leakage between roles ensures the platform is safe, fair, and trustworthy.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCOPE -->
+    <div class="page-section" id="section-scope">
+      <div class="doc-h2">Scope</div>
+      <p class="doc-p">A clear boundary of what is being built now versus what is explicitly deferred.</p>
+
+      <div class="doc-h3">In Scope</div>
+      <table class="scope-table">
+        <thead>
+          <tr><th>Area</th><th>Features</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Platform</strong></td>
+            <td>Flutter mobile app (all non-admin roles), MERN web dashboard (admin only)</td>
+            <td><span class="tag-in">✓ In Scope</span></td>
+          </tr>
+          <tr>
+            <td><strong>Authentication</strong></td>
+            <td>Role-based login, OTP phone verification for users, admin approval for helpers &amp; responders</td>
+            <td><span class="tag-in">✓ In Scope</span></td>
+          </tr>
+          <tr>
+            <td><strong>Alert System</strong></td>
+            <td>In-app panic button (3 types), silent SOS via side button, 10s cancellation, FCM push notifications</td>
+            <td><span class="tag-in">✓ In Scope</span></td>
+          </tr>
+          <tr>
+            <td><strong>Dispatch Engine</strong></td>
+            <td>5km radius search, 10-minute response timer with auto-escalation, conflict prevention, role-restricted dispatch</td>
+            <td><span class="tag-in">✓ In Scope</span></td>
+          </tr>
+          <tr>
+            <td><strong>Live Tracking</strong></td>
+            <td>Real-time GPS during incidents, bidirectional visibility, multi-responder on same incident</td>
+            <td><span class="tag-in">✓ In Scope</span></td>
+          </tr>
+          <tr>
+            <td><strong>Admin Dashboard</strong></td>
+            <td>Registration approvals, live incident map, targeted announcements, filtered logs</td>
+            <td><span class="tag-in">✓ In Scope</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h3">Explicitly Out of Scope (v1)</div>
+      <table class="scope-table">
+        <thead>
+          <tr><th>Feature</th><th>Reason Deferred</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Suspicious activity reports</td><td>Design decision pending</td></tr>
+          <tr><td>Offline / weak signal fallback</td><td>Technical complexity, future release</td></tr>
+          <tr><td>SMS fallback for SOS</td><td>Infrastructure decision pending</td></tr>
+          <tr><td>False alarm penalty system</td><td>Policy not defined</td></tr>
+          <tr><td>Incident closure rules</td><td>Stakeholder decision required</td></tr>
+          <tr><td>Crime escalation timer</td><td>Not yet defined</td></tr>
+          <tr><td>Radius auto-expansion logic</td><td>Deferred</td></tr>
+          <tr><td>Helper rating / trust score</td><td>Future release</td></tr>
+          <tr><td>Trusted org onboarding (Rescue 1122, Edhi)</td><td>Future release</td></tr>
+          <tr><td>Log export formats</td><td>TBD format</td></tr>
+          <tr><td>Admin force-reassign responder</td><td>Deferred</td></tr>
+          <tr><td>In-app chat / calling</td><td>Not planned</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <p><strong>Open Items requiring stakeholder decision:</strong> Who marks an incident as resolved? What is the false alarm policy? Does police dispatch have a 10-minute escalation timer?</p>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="page-section" id="section-arch">
+      <div class="doc-h2">Architecture</div>
+      <p class="doc-p">Three independently runnable applications inside a single pnpm monorepo, sharing no direct database access.</p>
+
+      <div class="doc-h3">System Boundaries</div>
+      <p class="doc-p">The Flutter mobile app serves all roles except admin. The React web dashboard serves admins only. The Express server is the single backend for both clients — it owns all business logic, dispatch decisions, and data. No client ever talks directly to the database.</p>
+
+      <table class="scope-table">
+        <thead><tr><th>Boundary</th><th>Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Flutter ↔ Server</td><td>REST + Socket.io only</td></tr>
+          <tr><td>React ↔ Server</td><td>REST + Socket.io only</td></tr>
+          <tr><td>Server ↔ MongoDB</td><td>Mongoose only, no raw driver queries</td></tr>
+          <tr><td>Flutter ↔ MongoDB</td><td><strong>Never</strong> — no direct connection</td></tr>
+          <tr><td>React ↔ MongoDB</td><td><strong>Never</strong> — no direct connection</td></tr>
+          <tr><td>packages/shared ↔ Flutter</td><td>Never imported — Flutter mirrors constants locally</td></tr>
+          <tr><td>FCM ↔ Server</td><td>Server sends push via FCM HTTP API only</td></tr>
+          <tr><td>Maps SDK ↔ Clients</td><td>Client-side only — server never calls maps API</td></tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h3">Auth & Access Model</div>
+      <p class="doc-p">Authentication is handled entirely by the Express server using <strong>JWT with role claims</strong>. On login, the server issues a signed JWT containing the user's ID and role. Every subsequent REST request must include this token in the <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">Authorization: Bearer &lt;token&gt;</code> header.</p>
+
+      <div class="callout callout-danger">
+        <span class="callout-icon">🔒</span>
+        <p><strong>JWT role is the single source of truth for access.</strong> No client-side role check is trusted. The server re-verifies role on every request and every socket event, regardless of what the client claims. There is no refresh token in v1 — session expiry forces re-login.</p>
+      </div>
+
+      <div class="doc-h3">Architecture Invariants</div>
+      <div class="invariant-list">
+        <div class="invariant-item">
+          <div class="inv-num">1</div>
+          <div class="inv-text"><strong>No business logic in controllers or route handlers.</strong> Controllers validate input, call a service, and return a response. All dispatch decisions, escalation timers, radius calculations, and role-restriction rules live exclusively in the service layer.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">2</div>
+          <div class="inv-text"><strong>No client ever writes to or reads from the database directly.</strong> All data access goes through the Express server.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">3</div>
+          <div class="inv-text"><strong>No request handler runs long-lived background work.</strong> Escalation timers and scheduled tasks are managed by a dedicated background service. A controller must hand off async work before returning a response.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">4</div>
+          <div class="inv-text"><strong>Socket event names are never hardcoded as strings.</strong> All event names are defined in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">packages/shared/src/events.ts</code> and imported wherever used.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">5</div>
+          <div class="inv-text"><strong>Every incident action is logged before a response is sent.</strong> No state change is communicated to any client unless it has first been persisted to the database.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">6</div>
+          <div class="inv-text"><strong>Helpers are never dispatched to crime or fire incidents.</strong> This rule is enforced in the dispatch service, not the route or controller. No API call or socket event can bypass it.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num">7</div>
+          <div class="inv-text"><strong>JWT role is the single source of truth for access.</strong> The server re-verifies role on every request and every socket event, regardless of what the client claims.</div>
+        </div>
+      </div>
+
+      <div class="doc-h3">Dispatch Escalation Chain — Medical</div>
+      <div class="dispatch-chain">
+        <div class="dispatch-node primary">
+          <div class="dn-label">Primary</div>
+          <div class="dn-name">Ambulance</div>
+          <div class="dn-time">0 → 10 min</div>
+        </div>
+        <div class="dispatch-arrow">→</div>
+        <div class="dispatch-node secondary">
+          <div class="dn-label">Escalation</div>
+          <div class="dn-name">Helper</div>
+          <div class="dn-time">if no ambulance</div>
+        </div>
+      </div>
+
+      <div class="doc-h3">Dispatch Escalation Chain — Crime</div>
+      <div class="dispatch-chain">
+        <div class="dispatch-node primary">
+          <div class="dn-label">Only Option</div>
+          <div class="dn-name">Police</div>
+          <div class="dn-time">Strict — no fallback</div>
+        </div>
+        <div class="dispatch-arrow">→</div>
+        <div class="dispatch-node" style="border-style:dashed;opacity:0.4;">
+          <div class="dn-label">Never</div>
+          <div class="dn-name">Helper</div>
+          <div class="dn-time">blocked by system</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STACK -->
+    <div class="page-section" id="section-stack">
+      <div class="doc-h2">Tech Stack</div>
+      <p class="doc-p">Every layer of the system and the technology that powers it.</p>
+
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin:24px 0;">
+        <div class="stack-row">
+          <div class="stack-layer">Mobile</div>
+          <div class="stack-tech">Flutter + Dart</div>
+          <div class="stack-note">BLoC + Repository pattern</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Web</div>
+          <div class="stack-tech">React + Vite + TypeScript</div>
+          <div class="stack-note">Redux Toolkit + RTK Query</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Backend</div>
+          <div class="stack-tech">Express.js + Node.js + TypeScript</div>
+          <div class="stack-note">Runtime: Bun</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Database</div>
+          <div class="stack-tech">MongoDB + Mongoose</div>
+          <div class="stack-note">Geospatial indexes, lean() reads</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Real-time</div>
+          <div class="stack-tech">Socket.io</div>
+          <div class="stack-note">JWT-verified connections</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Auth</div>
+          <div class="stack-tech">JWT + Role claims</div>
+          <div class="stack-note">No refresh tokens in v1</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Push</div>
+          <div class="stack-tech">Firebase Cloud Messaging (FCM)</div>
+          <div class="stack-note">Server-initiated only</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Validation</div>
+          <div class="stack-tech">Zod (server + web), Dart types (mobile)</div>
+          <div class="stack-note">Types inferred from schemas</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-layer">Packages</div>
+          <div class="stack-tech">pnpm workspaces</div>
+          <div class="stack-note">Monorepo</div>
+        </div>
+      </div>
+
+      <div class="callout callout-success">
+        <span class="callout-icon">✓</span>
+        <p>Token storage: Flutter uses <strong>flutter_secure_storage</strong> for JWT. The React dashboard stores the token <strong>in memory only</strong> — never in localStorage or sessionStorage.</p>
+      </div>
+    </div>
+
+    <!-- FOLDER STRUCTURE -->
+    <div class="page-section" id="section-structure">
+      <div class="doc-h2">Folder Structure</div>
+      <p class="doc-p">A pnpm monorepo with three apps and one shared package. No barrel files — no circular dependencies.</p>
+      <div class="tree"><span class="tree-dir">sea-system/</span>
+├── package.json               <span class="tree-comment">← root scripts</span>
+├── pnpm-workspace.yaml        <span class="tree-comment">← workspace config</span>
+├── .env.example
+│
+├── <span class="tree-dir">apps/</span>
+│   ├── <span class="tree-dir">server/</span>                <span class="tree-comment">← Express + Socket.io</span>
+│   │   └── src/
+│   │       ├── <span class="tree-dir">config/</span>        <span class="tree-comment">← db, env, constants</span>
+│   │       ├── <span class="tree-dir">controllers/</span>   <span class="tree-comment">← route handlers (thin)</span>
+│   │       ├── <span class="tree-dir">middleware/</span>    <span class="tree-comment">← auth, role guards, error</span>
+│   │       ├── <span class="tree-dir">models/</span>        <span class="tree-comment">← Mongoose schemas</span>
+│   │       ├── <span class="tree-dir">routes/</span>        <span class="tree-comment">← Express routers</span>
+│   │       ├── <span class="tree-dir">services/</span>      <span class="tree-comment">← ALL business logic</span>
+│   │       ├── <span class="tree-dir">sockets/</span>       <span class="tree-comment">← Socket.io handlers</span>
+│   │       └── index.ts
+│   │
+│   ├── <span class="tree-dir">web/</span>                   <span class="tree-comment">← React admin dashboard</span>
+│   │   └── src/
+│   │       ├── <span class="tree-dir">components/</span>
+│   │       ├── <span class="tree-dir">pages/</span>
+│   │       ├── <span class="tree-dir">features/</span>      <span class="tree-comment">← self-contained features</span>
+│   │       ├── <span class="tree-dir">store/slices/</span>  <span class="tree-comment">← Redux slices</span>
+│   │       ├── <span class="tree-dir">services/</span>      <span class="tree-comment">← RTK Query + React Query</span>
+│   │       └── main.tsx
+│   │
+│   └── <span class="tree-dir">mobile/</span>                <span class="tree-comment">← Flutter app</span>
+│       └── lib/
+│           ├── <span class="tree-dir">core/</span>          <span class="tree-comment">← constants, theme, router</span>
+│           ├── <span class="tree-dir">data/</span>          <span class="tree-comment">← repos, API, sockets</span>
+│           ├── <span class="tree-dir">domain/</span>        <span class="tree-comment">← entities, use cases</span>
+│           └── <span class="tree-dir">presentation/</span>  <span class="tree-comment">← screens, widgets, BLoCs</span>
+│
+└── <span class="tree-dir">packages/</span>
+    └── <span class="tree-dir">shared/</span>                <span class="tree-comment">← server + web only</span>
+        └── src/
+            ├── roles.ts
+            ├── errors.ts
+            ├── events.ts      <span class="tree-comment">← socket event constants</span>
+            └── <span class="tree-dir">schemas/</span>       <span class="tree-comment">← Zod schemas</span></div>
+
+      <div class="doc-h3">Key Rules</div>
+      <div class="invariant-list">
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">→</div>
+          <div class="inv-text"><strong>services/</strong> is where all business logic lives. Controllers never contain logic beyond validation + calling a service.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">→</div>
+          <div class="inv-text"><strong>packages/shared</strong> is a compile-time dependency only — never imported into the Flutter app. Flutter mirrors constants in <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">core/constants/</code>.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">→</div>
+          <div class="inv-text"><strong>No barrel files</strong> (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">index.ts</code> that re-exports everything) — they cause circular dependency issues in monorepos.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW: USER -->
+    <div class="page-section" id="section-flow-user">
+      <div class="doc-h2">Civilian Flow</div>
+      <p class="doc-p">All interactions available to a registered user (civilian) in the S.E.A mobile app.</p>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">👤</span>
+          <div class="flow-header-label">A — Registration & Onboarding</div>
+          <span class="flow-tag" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.2);">one-time</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">User downloads the S.E.A app and taps <strong>Sign Up</strong></div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Enters name, phone number, email, and password</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Phone number verified via <strong>OTP</strong></div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">Taken to home screen — app requests <strong>location permission</strong> (mandatory for SOS) and notification permission</div></div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">🆘</span>
+          <div class="flow-header-label">B — In-App Panic Button</div>
+          <span class="flow-tag" style="background:rgba(232,53,42,0.08);color:#fca5a5;border-color:rgba(232,53,42,0.2);">Medical / Fire / Crime</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">User opens the app and taps the panic button</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">User selects emergency type: <strong>Medical</strong>, <strong>Fire</strong>, or <strong>Crime</strong></div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">A <strong>10-second cancellation countdown</strong> appears — user can tap Cancel to abort</div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">If not cancelled, alert is locked and dispatched to nearest responder</div></div>
+          <div class="flow-step"><div class="step-num">5</div><div class="step-text">User sees <strong>live map</strong> with responder's location moving toward them, with real-time ETA</div></div>
+          <div class="flow-step"><div class="step-num">6</div><div class="step-text">Responder arrives → user sees <strong>"Responder has arrived"</strong> notification</div></div>
+          <div class="flow-step"><div class="step-num">7</div><div class="step-text">Incident closed → user receives incident summary notification</div></div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">🤫</span>
+          <div class="flow-header-label">C — Silent SOS (Physical Side Button)</div>
+          <span class="flow-tag" style="background:rgba(167,139,250,0.08);color:#c4b5fd;border-color:rgba(167,139,250,0.2);">Crime only</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">User is in a dangerous situation (e.g. robbery in progress)</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">User presses the <strong>physical side button</strong> on their device</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text"><strong>No sound, no visible screen change</strong> — fully discreet. 10-second silent cancellation window begins.</div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">If not cancelled, alert silently dispatched to <strong>nearest police mobile unit</strong></div></div>
+          <div class="flow-step"><div class="step-num">5</div><div class="step-text">User's live GPS location shared continuously with police</div></div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <p><strong>Cancellation (both modes):</strong> Within 10 seconds — tap Cancel (in-app) or re-press side button (silent SOS). Alert aborted with zero responder notification. Cancellation is logged silently.</p>
+      </div>
+    </div>
+
+    <!-- FLOW: RESPONDER -->
+    <div class="page-section" id="section-flow-responder">
+      <div class="doc-h2">Responder Flow</div>
+      <p class="doc-p">Applies to all three responder types: Ambulance, Police, and Firefighter.</p>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">🛡️</span>
+          <div class="flow-header-label">A — Registration & Onboarding</div>
+          <span class="flow-tag" style="background:rgba(245,158,11,0.08);color:#fbbf24;border-color:rgba(245,158,11,0.2);">Admin Approval Required</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">Taps <strong>Register as Responder</strong>, selects type: Ambulance / Police / Fire</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Fills in organization name, unit ID, contact details, service area</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Account marked <strong>Pending</strong> — admin reviews and approves</div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">Receives approval notification, can now log in and go on duty</div></div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">🚨</span>
+          <div class="flow-header-label">C — Receiving & Responding to an Alert</div>
+          <span class="flow-tag" style="background:rgba(232,53,42,0.08);color:#fca5a5;border-color:rgba(232,53,42,0.2);">10-min window</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">Emergency triggered by nearby user within 5 km</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Responder receives <strong>push notification</strong> with alert type and distance</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Opens app — sees incident details and user location on map. Has <strong>10 minutes to respond</strong></div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">Taps <strong>Accept</strong> — system confirms assignment, other responders notified</div></div>
+          <div class="flow-step"><div class="step-num">5</div><div class="step-text">Sees: live user location, nearest hospital pin (medical only), other responders en route</div></div>
+          <div class="flow-step"><div class="step-num">6</div><div class="step-text">Arrives on scene — taps <strong>Mark Arrived</strong></div></div>
+          <div class="flow-step"><div class="step-num">7</div><div class="step-text">Incident handled — taps <strong>Resolve Incident</strong> → returns to Available</div></div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ</span>
+        <p>Responders going <strong>off duty</strong> still receive area notifications if an incident occurs nearby — for situational awareness only. This is distinct from dispatch — they will not be assigned.</p>
+      </div>
+    </div>
+
+    <!-- FLOW: HELPER -->
+    <div class="page-section" id="section-flow-helper">
+      <div class="doc-h2">Helper Flow</div>
+      <p class="doc-p">Helpers are volunteer transport providers — cab drivers, bike riders, or any civilian with a vehicle. They assist with medical emergencies only.</p>
+
+      <div class="callout callout-danger">
+        <span class="callout-icon">🚫</span>
+        <p><strong>Strict restriction:</strong> Helpers are <em>never</em> dispatched to crime or fire incidents. This is enforced at the dispatch service level — no API call can bypass it.</p>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">🚕</span>
+          <div class="flow-header-label">C — Receiving a Medical Alert</div>
+          <span class="flow-tag" style="background:rgba(34,197,94,0.08);color:#4ade80;border-color:rgba(34,197,94,0.2);">Medical Only</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">A medical emergency occurs and <strong>no ambulance is available</strong></div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Helper receives push notification with incident location and distance</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Opens app — sees user location and <strong>nearest hospital on map</strong></div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">Has <strong>10 minutes</strong> to accept or decline</div></div>
+          <div class="flow-step"><div class="step-num">5</div><div class="step-text">Taps <strong>Accept</strong> — navigates to user, assists with transport to hospital</div></div>
+          <div class="flow-step"><div class="step-num">6</div><div class="step-text">Taps <strong>Mark Complete</strong> — incident resolved</div></div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ</span>
+        <p>Unlike ambulances and firefighters, helpers <strong>do not receive area notifications</strong> when offline. Going offline means full silence — no alerts, no informational notifications.</p>
+      </div>
+    </div>
+
+    <!-- FLOW: ADMIN -->
+    <div class="page-section" id="section-flow-admin">
+      <div class="doc-h2">Admin Dashboard Flow</div>
+      <p class="doc-p">Admins operate exclusively from the MERN web dashboard. They have full system visibility and act as the control center for approvals, monitoring, and communications.</p>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">✅</span>
+          <div class="flow-header-label">B — Approving Registrations</div>
+          <span class="flow-tag" style="background:rgba(245,158,11,0.08);color:#fbbf24;border-color:rgba(245,158,11,0.2);">target: &lt;30 seconds</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">Admin sees pending registrations list — helpers, ambulances, police, fire</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Reviews submitted details for each applicant</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Taps <strong>Approve</strong> or <strong>Reject</strong> — applicant receives push notification instantly</div></div>
+          <div class="flow-step"><div class="step-num">4</div><div class="step-text">Approved accounts go live immediately</div></div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">📣</span>
+          <div class="flow-header-label">C — Live Announcement</div>
+          <span class="flow-tag" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.2);">target: &lt;1 minute</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">Admin taps <strong>New Announcement</strong>, types the message</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Selects target audience: <strong>All Users / Responders Only / Helpers Only / Everyone</strong></div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Publishes — notification sent instantly, banner appears in app for all targeted roles</div></div>
+        </div>
+      </div>
+
+      <div class="flow-block">
+        <div class="flow-header">
+          <span style="font-size:16px;">🗺️</span>
+          <div class="flow-header-label">D — Monitoring Active Incidents</div>
+          <span class="flow-tag" style="background:rgba(34,197,94,0.08);color:#4ade80;border-color:rgba(34,197,94,0.2);">real-time</span>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="step-num">1</div><div class="step-text">Admin sees all active incidents on a <strong>live map</strong> — no refresh needed</div></div>
+          <div class="flow-step"><div class="step-num">2</div><div class="step-text">Each incident shows: type, user location, assigned responder, elapsed time, status</div></div>
+          <div class="flow-step"><div class="step-num">3</div><div class="step-text">Full incident detail: timeline of events, responder movements, complete log</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE STANDARDS -->
+    <div class="page-section" id="section-code">
+      <div class="doc-h2">Code Standards</div>
+      <p class="doc-p">Non-negotiable rules enforced across every language and framework in the stack.</p>
+
+      <div class="doc-h3">TypeScript — Universal Rules</div>
+      <div class="callout callout-danger">
+        <span class="callout-icon">🚫</span>
+        <p><strong>No <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">any</code> — ever.</strong> Use <code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">unknown</code> and narrow it, or define a proper type. No type assertions (<code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:3px;">as SomeType</code>) unless absolutely unavoidable.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">TypeScript</span><span style="font-size:11px;color:var(--text-dim);">Zod-inferred types — preferred pattern</span></div>
+        <div class="code-body"><span class="code-comment">// ✓ Correct — types derived from Zod schema</span>
+<span class="code-kw">const</span> incidentSchema = z.object({
+  id: z.string(),
+  type: z.enum([<span class="code-str">'medical'</span>, <span class="code-str">'fire'</span>, <span class="code-str">'crime'</span>]),
+  status: z.enum([<span class="code-str">'active'</span>, <span class="code-str">'resolved'</span>]),
+  location: z.object({ lat: z.number(), lng: z.number() }),
+  createdAt: z.date(),
+})
+<span class="code-kw">type</span> <span class="code-type">Incident</span> = z.infer&lt;<span class="code-kw">typeof</span> incidentSchema&gt;
+
+<span class="code-comment">// ✗ Wrong — never define type separately from schema</span>
+<span class="code-kw">type</span> <span class="code-type">Incident</span> = { id: string; type: string; ... }</div>
+      </div>
+
+      <div class="doc-h3">Express — Async Handlers</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">TypeScript</span><span style="font-size:11px;color:var(--text-dim);">asyncHandler utility — mandatory</span></div>
+        <div class="code-body"><span class="code-kw">const</span> <span class="code-fn">asyncHandler</span> = (fn: <span class="code-type">RequestHandler</span>) =&gt;
+  (req, res, next) =&gt;
+    Promise.<span class="code-fn">resolve</span>(<span class="code-fn">fn</span>(req, res, next)).<span class="code-fn">catch</span>(next)
+
+<span class="code-comment">// Every route handler must be wrapped — no unhandled rejections</span>
+router.<span class="code-fn">post</span>(<span class="code-str">'/alerts'</span>, <span class="code-fn">asyncHandler</span>(alertController.create))</div>
+      </div>
+
+      <div class="doc-h3">HTTP Status Code Reference</div>
+      <table class="scope-table">
+        <thead><tr><th>Situation</th><th>Code</th></tr></thead>
+        <tbody>
+          <tr><td>Success with data</td><td><span class="metric-inline">200</span></td></tr>
+          <tr><td>Resource created</td><td><span class="metric-inline">201</span></td></tr>
+          <tr><td>Bad request / validation fail</td><td><span class="metric-inline">400</span></td></tr>
+          <tr><td>Unauthenticated</td><td><span class="metric-inline">401</span></td></tr>
+          <tr><td>Wrong role / forbidden</td><td><span class="metric-inline">403</span></td></tr>
+          <tr><td>Not found</td><td><span class="metric-inline">404</span></td></tr>
+          <tr><td>Server error</td><td><span class="metric-inline">500</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h3">Socket.io — Event Naming</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">TypeScript</span><span style="font-size:11px;color:var(--text-dim);">domain:action convention</span></div>
+        <div class="code-body"><span class="code-comment">// packages/shared/src/events.ts</span>
+<span class="code-kw">export const</span> EVENTS = {
+  INCIDENT_DISPATCHED: <span class="code-str">'incident:dispatched'</span>,
+  INCIDENT_ACCEPTED:   <span class="code-str">'incident:accepted'</span>,
+  LOCATION_UPDATE:     <span class="code-str">'location:update'</span>,
+  RESPONDER_ARRIVED:   <span class="code-str">'responder:arrived'</span>,
+} <span class="code-kw">as const</span>
+
+<span class="code-comment">// ✓ Room naming — consistent, built from constants</span>
+<span class="code-kw">const</span> <span class="code-fn">incidentRoom</span> = (id: string) =&gt; <span class="code-str">`incident:${id}`</span>
+<span class="code-kw">const</span> <span class="code-fn">zoneRoom</span> = (city: string) =&gt; <span class="code-str">`zone:${city}`</span></div>
+      </div>
+
+      <div class="doc-h3">Flutter — BLoC Sealed Classes</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Dart</span><span style="font-size:11px;color:var(--text-dim);">Events and states as sealed classes</span></div>
+        <div class="code-body"><span class="code-kw">sealed class</span> <span class="code-type">IncidentEvent</span> {}
+<span class="code-kw">class</span> <span class="code-type">SOSTriggered</span> <span class="code-kw">extends</span> IncidentEvent {
+  <span class="code-kw">final</span> EmergencyType type;
+  SOSTriggered(this.type);
+}
+<span class="code-kw">class</span> <span class="code-type">SOSCancelled</span> <span class="code-kw">extends</span> IncidentEvent {}
+
+<span class="code-kw">sealed class</span> <span class="code-type">IncidentState</span> {}
+<span class="code-kw">class</span> <span class="code-type">IncidentIdle</span> <span class="code-kw">extends</span> IncidentState {}
+<span class="code-kw">class</span> <span class="code-type">IncidentDispatched</span> <span class="code-kw">extends</span> IncidentState {
+  <span class="code-kw">final</span> Incident incident;
+  IncidentDispatched(this.incident);
+}</div>
+      </div>
+
+      <div class="doc-h3">MongoDB — Schema Rules</div>
+      <div class="invariant-list">
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:13px;">→</div>
+          <div class="inv-text">One schema per file — filename matches model name (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">incident.model.ts</code>)</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:13px;">→</div>
+          <div class="inv-text">Use <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">lean()</code> on all read-only queries — returns plain JS objects, not Mongoose documents</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:13px;">→</div>
+          <div class="inv-text">Timestamps enabled on every schema: <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">{ timestamps: true }</code>. Never expose <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg-2);padding:1px 6px;border-radius:4px;color:#c3e88d;">__v</code> in API responses.</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:13px;">→</div>
+          <div class="inv-text">Transactions used for any operation writing to more than one collection</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS CRITERIA -->
+    <div class="page-section" id="section-success">
+      <div class="doc-h2">Success Criteria</div>
+      <p class="doc-p">Measurable thresholds that define a successful v1 delivery.</p>
+
+      <div class="doc-h3">Technical Targets</div>
+      <div class="criteria-grid">
+        <div class="criteria-card">
+          <div class="criteria-title" style="color:#fca5a5;">
+            <div class="criteria-icon" style="background:rgba(232,53,42,0.12);">🆘</div>
+            Alert & Dispatch
+          </div>
+          <ul class="criteria-items">
+            <li>SOS dispatched within <span class="metric-inline">3s</span> of 10s window ending</li>
+            <li>Nearest responder in 5km correct <span class="metric-inline">100%</span></li>
+            <li>Auto-escalation at exactly <span class="metric-inline">10 min</span> — never early or late</li>
+            <li>Double-assignment never occurs</li>
+            <li>Silent SOS: zero visible UI change</li>
+          </ul>
+        </div>
+        <div class="criteria-card">
+          <div class="criteria-title" style="color:#60a5fa;">
+            <div class="criteria-icon" style="background:rgba(59,130,246,0.12);">📡</div>
+            Real-time Tracking
+          </div>
+          <ul class="criteria-items">
+            <li>Location updates max delay <span class="metric-inline">2s</span></li>
+            <li>Live map stable throughout incident</li>
+            <li>ETA recalculates correctly as responder moves</li>
+          </ul>
+        </div>
+        <div class="criteria-card">
+          <div class="criteria-title" style="color:#4ade80;">
+            <div class="criteria-icon" style="background:rgba(34,197,94,0.12);">🔔</div>
+            Notifications
+          </div>
+          <ul class="criteria-items">
+            <li>Push notifications delivered within <span class="metric-inline">5s</span></li>
+            <li>Area notifications reach off-duty responders reliably</li>
+            <li>Admin announcements reach all within <span class="metric-inline">10s</span></li>
+          </ul>
+        </div>
+        <div class="criteria-card">
+          <div class="criteria-title" style="color:#fbbf24;">
+            <div class="criteria-icon" style="background:rgba(245,158,11,0.12);">⚡</div>
+            Reliability
+          </div>
+          <ul class="criteria-items">
+            <li>Handles simultaneous incidents — zero cross-assignment</li>
+            <li>No incident silently dropped — every alert escalates</li>
+            <li>All incident data logged with correct timestamps</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="doc-h3">Product Targets</div>
+      <table class="scope-table">
+        <thead><tr><th>Role</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Civilian</strong> — SOS to responder on map</td><td><span class="metric-inline">≤ 60s</span></td></tr>
+          <tr><td><strong>Civilian</strong> — Cancel within 10s = zero dispatch</td><td><span class="metric-inline">100%</span></td></tr>
+          <tr><td><strong>Civilian</strong> — Trigger SOS with no technical knowledge</td><td><span class="metric-inline">≤ 3 taps</span></td></tr>
+          <tr><td><strong>Responder</strong> — Accept alert and begin navigation</td><td><span class="metric-inline">≤ 5 taps</span></td></tr>
+          <tr><td><strong>Responder</strong> — Availability toggle reflects in system</td><td><span class="metric-inline">real-time</span></td></tr>
+          <tr><td><strong>Admin</strong> — Approve or reject a registration</td><td><span class="metric-inline">≤ 30s</span></td></tr>
+          <tr><td><strong>Admin</strong> — Post system-wide announcement</td><td><span class="metric-inline">≤ 1 min</span></td></tr>
+          <tr><td><strong>Admin</strong> — Dashboard loads on login</td><td><span class="metric-inline">≤ 2s</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="doc-h3">Business Invariants</div>
+      <div class="invariant-list">
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">✓</div>
+          <div class="inv-text">Every registered and approved responder receives alerts relevant to their role — <strong>no missed dispatches</strong></div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">✓</div>
+          <div class="inv-text"><strong>No helper is ever dispatched to a crime or fire incident</strong> — enforced at the system level</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">✓</div>
+          <div class="inv-text">Every incident has a <strong>complete, unbroken log</strong> from trigger to resolution</div>
+        </div>
+        <div class="invariant-item">
+          <div class="inv-num" style="font-size:14px;">✓</div>
+          <div class="inv-text"><strong>Zero unauthorized access</strong> across roles — users cannot see responder management, helpers cannot see police dispatches</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+  const pages = {
+    'overview': { section: 'overview', label: 'Overview' },
+    'goals': { section: 'goals', label: 'Goals' },
+    'scope': { section: 'scope', label: 'Scope' },
+    'arch': { section: 'arch', label: 'Architecture' },
+    'stack': { section: 'stack', label: 'Tech Stack' },
+    'structure': { section: 'structure', label: 'Folder Structure' },
+    'flow-user': { section: 'flow-user', label: 'Civilian Flow' },
+    'flow-responder': { section: 'flow-responder', label: 'Responder Flow' },
+    'flow-helper': { section: 'flow-helper', label: 'Helper Flow' },
+    'flow-admin': { section: 'flow-admin', label: 'Admin Flow' },
+    'code': { section: 'code', label: 'Code Standards' },
+    'success': { section: 'success', label: 'Success Criteria' },
+  };
+
+  function navigate(key) {
+    const page = pages[key];
+    if (!page) return;
+
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    document.getElementById('section-' + page.section).classList.add('active');
+    document.getElementById('breadcrumb-current').textContent = page.label;
+
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') === `navigate('${key}')`) {
+        n.classList.add('active');
+      }
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
