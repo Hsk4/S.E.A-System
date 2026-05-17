@@ -1,0 +1,4 @@
+include:
+  - sea-docs.html
+exclude:
+  - "**/*.md"
